@@ -4,6 +4,7 @@ import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'otp_screen.dart';
 import 'home_screen.dart';
+import 'homepage_screen.dart';
 
 void main() {
   runApp(AuthApp());
@@ -21,7 +22,8 @@ class AuthApp extends StatelessWidget {
         '/signup': (context) => SignupScreen(),
         '/otp': (context) => OtpScreen(),
         '/': (context) => HomeScreen(), // Route for Home screen
-        "/google": (context) => GoogleScreen(),
+        '/google': (context) => GoogleScreen(),
+        '/home': (context) => Homepage(),
       },
     );
   }

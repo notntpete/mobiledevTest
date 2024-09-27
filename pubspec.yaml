@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: latest_version
+  firebase_auth: latest_version
 
   cupertino_icons: ^1.0.8
   flutter_signin_button: ^2.0.0
