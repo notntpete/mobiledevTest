@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  bool _isAgreed = false; // Variable to hold checkbox state
+  bool _isAgreed = false;
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  // Function to validate form fields
   bool _validateForm() {
     String username = _usernameController.text.trim();
     String email = _emailController.text.trim();
@@ -24,75 +25,86 @@ class _SignupScreenState extends State<SignupScreen> {
         email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      return false; // Fields should not be empty
+      return false;
     }
     if (password != confirmPassword) {
-      return false; // Passwords must match
+      return false;
     }
-    // Add more validation logic if necessary (e.g., email format)
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // Close button
                 Align(
                   alignment: Alignment.topLeft,
                   child: IconButton(
-                    icon: Icon(Icons.close,
-                        size: 30, color: Colors.black), // Set color to black
+                    icon:
+                        const Icon(Icons.close, size: 30, color: Colors.black),
                     onPressed: () {
-                      Navigator.pop(context); // Navigate back to HomeScreen
+                      Navigator.pop(context);
                     },
-                    tooltip: 'Close', // Add tooltip for better UX
+                    tooltip: 'Close',
                   ),
                 ),
-                SizedBox(height: 10),
-
-                // Set image height to a smaller percentage of the screen height
-                Container(
-                  height:
-                      constraints.maxHeight * 0.25, // 25% of available height
-                  width: double.infinity, // Full width
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: constraints.maxHeight * 0.25,
+                  width: double.infinity,
                   child: Image.network(
-                    'https://cdn.discordapp.com/attachments/869943496788824107/1288302397160034365/hair_no_bg.png?ex=66f4b09a&is=66f35f1a&hm=18d075d5f803d14a36314d2215ffe00ddc6d7a5d21138d51ca75b9e66aa4b4ed',
-                    fit: BoxFit.cover, // Cover the container
+                    'https://cdn.discordapp.com/attachments/869943496788824107/1288302397160034365/hair_no_bg.png?ex=6708771a&is=6707259a&hm=d12eaebf729c7f5ce2f6dad9ba0d94f84455c8f6f51fbd8c8ecb4b9a77debc9e',
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(child: Text('Image failed to load'));
+                    },
                   ),
                 ),
-                SizedBox(height: 10),
-                Text('Create your account', style: TextStyle(fontSize: 24)),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
+                const Text('Create your account',
+                    style: TextStyle(fontSize: 24)),
+                const SizedBox(height: 10),
                 Expanded(
                   child: SingleChildScrollView(
-                    // Allow scrolling if the keyboard opens
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextField(
                           controller: _usernameController,
-                          decoration: InputDecoration(labelText: 'Username'),
+                          decoration:
+                              const InputDecoration(labelText: 'Username'),
                         ),
                         TextField(
                           controller: _emailController,
-                          decoration: InputDecoration(labelText: 'Email'),
+                          decoration: const InputDecoration(labelText: 'Email'),
                         ),
                         TextField(
                           controller: _passwordController,
-                          decoration: InputDecoration(labelText: 'Password'),
+                          decoration:
+                              const InputDecoration(labelText: 'Password'),
                           obscureText: true,
                         ),
                         TextField(
                           controller: _confirmPasswordController,
-                          decoration:
-                              InputDecoration(labelText: 'Confirm Password'),
+                          decoration: const InputDecoration(
+                              labelText: 'Confirm Password'),
                           obscureText: true,
                         ),
                         Row(
@@ -102,12 +114,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               value: _isAgreed,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  _isAgreed =
-                                      value ?? false; // Update checkbox state
+                                  _isAgreed = value ?? false;
                                 });
                               },
                             ),
-                            Expanded(
+                            const Expanded(
                               child: Text("I agree with Privacy and Policy"),
                             ),
                           ],
@@ -116,97 +127,83 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                 ),
-                // Button Section
                 Column(
                   children: [
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red[100], // Light red color
+                          backgroundColor: Colors.red[100],
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(30.0), // Rounded corners
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
                         onPressed: () {
-                          // Simple validation check before navigating
                           if (_isAgreed && _validateForm()) {
                             Navigator.pushNamed(context, '/otp');
                           } else {
-                            // Show an error if the form is not valid or the checkbox is not checked
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                   content: Text(
                                       'Please complete the form and agree to the terms.')),
                             );
                           }
                         },
-                        child: Text('Sign Up'),
+                        child: const Text('Sign Up'),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text('or continue with'),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    const Text('or continue with'),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.g_translate),
+                          icon: const Icon(Icons.g_translate),
                           iconSize: 40,
                           onPressed: () {
                             Navigator.pushNamed(context, '/google');
-                            // Handle Google sign in logic
                           },
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         IconButton(
-                          icon: FaIcon(FontAwesomeIcons.facebook),
+                          icon: const FaIcon(FontAwesomeIcons.facebook),
                           iconSize: 40,
-                          onPressed: () {
-                            // Handle Facebook sign in logic
-                          },
+                          onPressed: () {},
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.black, // Background color
+                            color: Colors.black,
                           ),
                           child: IconButton(
-                            icon: Icon(Icons.apple,
-                                color: Colors.white), // Apple icon
-                            iconSize: 30, // Adjust icon size
-                            onPressed: () {
-                              // Handle Apple sign in logic
-                            },
+                            icon: const Icon(Icons.apple, color: Colors.white),
+                            iconSize: 30,
+                            onPressed: () {},
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10), // Space before "Sign In" button
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Already have an account?"),
-                        SizedBox(width: 10), // Spacing between text and button
+                        const Text("Already have an account?"),
+                        const SizedBox(width: 10),
                         Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 5), // Padding around text
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.red), // Border color set to red
-                            borderRadius:
-                                BorderRadius.circular(20.0), // Rounded corners
+                            border: Border.all(color: Colors.red),
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: TextButton(
                             onPressed: () {
                               Navigator.pushNamed(context, '/login');
                             },
-                            child: Text("Sign In",
-                                style:
-                                    TextStyle(color: Colors.red)), // Text style
+                            child: const Text("Sign In",
+                                style: TextStyle(color: Colors.red)),
                           ),
                         ),
                       ],

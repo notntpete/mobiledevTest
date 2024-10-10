@@ -1,15 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
+    // Simulating a network call (replace with your actual login logic)
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Navigate to MealScreen directly
+    Navigator.pushNamed(context, '/meal'); // Adjust the route as needed
+
+    setState(() {
+      _isLoading = false; // Stop loading
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
         leading: IconButton(
-          icon: Icon(Icons.close), // Change to "X" icon
+          icon: const Icon(Icons.close),
           onPressed: () {
             Navigator.pushNamed(context, '/'); // Navigate to HomeScreen
           },
@@ -20,22 +47,22 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image that fits the width and height of the screen
-            Container(
-              width: double.infinity, // Full width
-              height: MediaQuery.of(context).size.height *
-                  0.3, // Set height as 30% of screen height
+            SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.3,
               child: Image.network(
-                'https://cdn.discordapp.com/attachments/869943496788824107/1288300114674323529/mouse_drawing-removebg-preview.png?ex=66f4ae7a&is=66f35cfa&hm=c0e53a0e1c247cd93ee86895aa3e00b2791cfdabd34819bc90444b0c86c04afc&',
-                fit: BoxFit
-                    .cover, // Cover the whole container while maintaining aspect ratio
+                'https://cdn.discordapp.com/attachments/869943496788824107/1288300114674323529/mouse_drawing-removebg-preview.png?ex=670874fa&is=6707237a&hm=5ccf443cd297decacb1971efa1742b73955cb72a87d95bab7f4f9e7bac4abd1c',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(child: Text('Image failed to load'));
+                },
               ),
             ),
-            SizedBox(height: 20),
-            Text('Hello, Welcome Back!', style: TextStyle(fontSize: 24)),
-            SizedBox(height: 20),
-            // Username TextField with Rounded Border and Light Red Background
+            const SizedBox(height: 20),
+            const Text('Hello, Welcome Back!', style: TextStyle(fontSize: 24)),
+            const SizedBox(height: 20),
             TextField(
+              controller: _usernameController,
               decoration: InputDecoration(
                 labelText: 'Username',
                 filled: true,
@@ -46,9 +73,9 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            // Password TextField with Rounded Border and Light Red Background
+            const SizedBox(height: 20),
             TextField(
+              controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
                 filled: true,
@@ -66,95 +93,80 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   children: [
                     Checkbox(value: false, onChanged: (value) {}),
-                    Text('Remember Me'),
+                    const Text('Remember Me'),
                   ],
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: Text('Forgot Password?'),
+                  child: const Text('Forgot Password?'),
                 ),
               ],
             ),
-            // Sign In Button with light red color and rounded square shape
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red[100], // Light red color
+                  backgroundColor: Colors.red[100],
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(30.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                onPressed: () {
-                  // Handle sign-in logic
-                },
-                child: Text('Sign In'),
+                onPressed: _isLoading ? null : _login, // Disable when loading
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Sign In'),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Google Sign In Icon
                 IconButton(
-                  icon: Icon(Icons.g_translate),
+                  icon: const Icon(Icons.g_translate),
                   iconSize: 40,
                   onPressed: () {
                     Navigator.pushNamed(context, '/google');
-                    // Handle Google sign in logic
                   },
                 ),
-                SizedBox(width: 20),
-                // Facebook Sign In Icon using FontAwesome
+                const SizedBox(width: 20),
                 IconButton(
-                  icon: FaIcon(FontAwesomeIcons.facebook),
+                  icon: const FaIcon(FontAwesomeIcons.facebook),
                   iconSize: 40,
-                  onPressed: () {
-                    // Handle Facebook sign in logic
-                  },
+                  onPressed: () {},
                 ),
-                SizedBox(width: 20),
-                // Apple Sign In Circular Icon
+                const SizedBox(width: 20),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black, // Background color
+                    color: Colors.black,
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.apple, color: Colors.white), // Apple icon
-                    iconSize: 30, // Adjust icon size
-                    onPressed: () {
-                      // Handle Apple sign in logic
-                    },
+                    icon: const Icon(Icons.apple, color: Colors.white),
+                    iconSize: 30,
+                    onPressed: () {},
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20), // Add space between buttons
-
-            // Row for "Don't have an account?" text and "Sign Up" button
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Don't have an account?"),
-                SizedBox(width: 10), // Spacing between text and button
-                // Sign Up Button with Rounded Border around text
+                const Text("Don't have an account?"),
+                const SizedBox(width: 10),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 5), // Padding around text
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.red), // Border color set to red
-                    borderRadius:
-                        BorderRadius.circular(20.0), // Rounded corners
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/signup');
                     },
-                    child: Text("Sign Up",
-                        style: TextStyle(color: Colors.red)), // Text style
+                    child: const Text("Sign Up",
+                        style: TextStyle(color: Colors.red)),
                   ),
                 ),
               ],

@@ -10,17 +10,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: latest_version
-  firebase_auth: latest_version
 
   cupertino_icons: ^1.0.8
   flutter_signin_button: ^2.0.0
+  dio: ^5.1.1  # Added Dio package for network requests
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   
-
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1  # Updated to a newer version
 
@@ -33,5 +31,3 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/images/icon.png"  # Specify the path to your app icon
-
-
